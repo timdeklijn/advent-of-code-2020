@@ -13,18 +13,18 @@ func lineSplitter(s string) (int, int, string, string) {
 	// Split line on spaces
 	splt := strings.Split(s, " ")
 
-	// Get min and max occurances of character in password
-	occSplit := strings.Split(splt[0], "-")
-	i1, err := strconv.Atoi(occSplit[0])
+	// Parse ints in the fist element of the split list
+	spl1 := strings.Split(splt[0], "-")
+	i1, err := strconv.Atoi(spl1[0])
 	if err != nil {
 		panic(err)
 	}
-	i2, err := strconv.Atoi(occSplit[1])
+	i2, err := strconv.Atoi(spl1[1])
 	if err != nil {
 		panic(err)
 	}
 
-	// Get the character to count
+	// Remove ':' from second element of the split
 	char := strings.Trim(splt[1], ":")
 	return i1, i2, char, splt[2]
 }
