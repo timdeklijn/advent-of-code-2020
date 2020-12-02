@@ -8,30 +8,38 @@ import (
 	"strings"
 )
 
+// Parse line to int-int-string-string removing some special chars
+func lineSplitter(s string) (int, int, string, string) {
+	// Split line on spaces
+	splt := strings.Split(s, " ")
+
+	// Get min and max occurances of character in password
+	occSplit := strings.Split(splt[0], "-")
+	i1, err := strconv.Atoi(occSplit[0])
+	if err != nil {
+		panic(err)
+	}
+	i2, err := strconv.Atoi(occSplit[1])
+	if err != nil {
+		panic(err)
+	}
+
+	// Get the character to count
+	char := strings.Trim(splt[1], ":")
+	return i1, i2, char, splt[2]
+}
+
 // CheckPasswordsPart2 is the solution to day_2_2
 func CheckPasswordsPart2(s bufio.Scanner) int {
 	correctPW := 0
 	for s.Scan() {
-		// Split line on spaces
-		splt := strings.Split(s.Text(), " ")
 
-		// Get min and max occurances of character in password
-		occSplit := strings.Split(splt[0], "-")
-		pos1, err := strconv.Atoi(occSplit[0])
-		if err != nil {
-			panic(err)
-		}
-		pos2, err := strconv.Atoi(occSplit[1])
-		if err != nil {
-			panic(err)
-		}
-
-		// Get the character to count
-		char := strings.Trim(splt[1], ":")
+		// parse line
+		pos1, pos2, char, pw := lineSplitter(s.Text())
 
 		// Check if char is in place
-		ok1 := string(splt[2][pos1-1]) == char
-		ok2 := string(splt[2][pos2-1]) == char
+		ok1 := string(pw[pos1-1]) == char
+		ok2 := string(pw[pos2-1]) == char
 
 		// There should be exactly 1 true. So that is an XOR operation.
 		if (ok1 || ok2) && !(ok1 && ok2) {
@@ -50,25 +58,12 @@ func CheckPasswordsPart2(s bufio.Scanner) int {
 func CheckPasswords(s bufio.Scanner) int {
 	correctPW := 0
 	for s.Scan() {
-		// Split line on spaces
-		splt := strings.Split(s.Text(), " ")
 
-		// Get min and max occurances of character in password
-		occSplit := strings.Split(splt[0], "-")
-		minOcc, err := strconv.Atoi(occSplit[0])
-		if err != nil {
-			panic(err)
-		}
-		maxOcc, err := strconv.Atoi(occSplit[1])
-		if err != nil {
-			panic(err)
-		}
-
-		// Get the character to count
-		char := strings.Trim(splt[1], ":")
+		// parse line
+		minOcc, maxOcc, char, pw := lineSplitter(s.Text())
 
 		// Count the character in the password
-		charOcc := strings.Count(splt[2], char)
+		charOcc := strings.Count(pw, char)
 
 		// Assert if password is correct
 		if charOcc >= minOcc && charOcc <= maxOcc {
