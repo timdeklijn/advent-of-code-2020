@@ -30,7 +30,7 @@ func lineSplitter(s string) (int, int, string, string) {
 }
 
 // CheckPasswordsPart2 is the solution to day_2_2
-func CheckPasswordsPart2(s bufio.Scanner) int {
+func CheckPasswordsPart2(s *bufio.Scanner) int {
 	correctPW := 0
 	for s.Scan() {
 
@@ -55,7 +55,7 @@ func CheckPasswordsPart2(s bufio.Scanner) int {
 }
 
 // CheckPasswords is the solution to day_2_1
-func CheckPasswords(s bufio.Scanner) int {
+func CheckPasswords(s *bufio.Scanner) int {
 	correctPW := 0
 	for s.Scan() {
 
@@ -90,7 +90,7 @@ func main() {
 		scanner := bufio.NewScanner(file)
 
 		// Run solution
-		fmt.Println("Day 1:", CheckPasswords(*scanner))
+		fmt.Println("Day 1:", CheckPasswords(scanner))
 	}
 	// Create file scanner
 	file, err := os.Open("data_2.txt")
@@ -101,5 +101,5 @@ func main() {
 	scanner := bufio.NewScanner(file)
 
 	// Run solution
-	fmt.Println("Day 2:", CheckPasswordsPart2(*scanner))
+	fmt.Println("Day 2:", CheckPasswordsPart2(scanner))
 }

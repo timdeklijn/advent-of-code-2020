@@ -17,7 +17,7 @@ func Test_checkPasswords(t *testing.T) {
 	scanner := bufio.NewScanner(r)
 
 	type args struct {
-		s bufio.Scanner
+		s *bufio.Scanner
 	}
 	tests := []struct {
 		name string
@@ -27,7 +27,7 @@ func Test_checkPasswords(t *testing.T) {
 		{
 			name: "Example",
 			args: args{
-				s: *scanner,
+				s: scanner,
 			},
 			want: 2,
 		},
@@ -47,7 +47,7 @@ func TestCheckPasswordsPart2(t *testing.T) {
 	scanner := bufio.NewScanner(r)
 
 	type args struct {
-		s bufio.Scanner
+		s *bufio.Scanner
 	}
 	tests := []struct {
 		name string
@@ -57,7 +57,7 @@ func TestCheckPasswordsPart2(t *testing.T) {
 		{
 			name: "Example",
 			args: args{
-				s: *scanner,
+				s: scanner,
 			},
 			want: 1,
 		},
