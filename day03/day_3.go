@@ -112,6 +112,6 @@ func main() {
 	if !part2 {
 		fmt.Println("Day 3-1:", TreesInRoute(scanner))
 	} else {
-		fmt.Println("Day 3-1:", TreesInRouteProduct(scanner))
+		fmt.Println("Day 3-2Ì:", TreesInRouteProduct(scanner))
 	}
 }
