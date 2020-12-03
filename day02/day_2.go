@@ -79,19 +79,7 @@ func CheckPasswords(s *bufio.Scanner) int {
 }
 
 func main() {
-	day1 := false
-	if day1 {
-		// Create file scanner
-		file, err := os.Open("data_2.txt")
-		if err != nil {
-			panic(err)
-		}
-		defer file.Close()
-		scanner := bufio.NewScanner(file)
-
-		// Run solution
-		fmt.Println("Day 1:", CheckPasswords(scanner))
-	}
+	part1 := false
 	// Create file scanner
 	file, err := os.Open("data_2.txt")
 	if err != nil {
@@ -99,7 +87,11 @@ func main() {
 	}
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
-
-	// Run solution
-	fmt.Println("Day 2:", CheckPasswordsPart2(scanner))
+	if part1 {
+		// Run solution
+		fmt.Println("Day 1:", CheckPasswords(scanner))
+	} else {
+		// Run solution
+		fmt.Println("Day 2:", CheckPasswordsPart2(scanner))
+	}
 }

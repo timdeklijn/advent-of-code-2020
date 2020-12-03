@@ -79,17 +79,16 @@ func main() {
 	fmt.Println("Day 1")
 	// Do part 1 or part 2
 	part2 := true
+	// Choose dataloader
+	l := DataFromFile
 	if !part2 {
-		// Choose dataloader
-		l := DataFromFile
-		// Find the product of the two elements in the list that sum to 2020
 		r, err := FindPair(l("data_1.txt"))
+		fmt.Println(r)
+		// Find the product of the two elements in the list that sum to 2020
 		if err != nil {
 			panic(err)
 		}
-		fmt.Println(r)
 	} else {
-		l := DataFromFile
 		r, err := FindTriple(l("data_1.txt"))
 		if err != nil {
 			panic(err)
