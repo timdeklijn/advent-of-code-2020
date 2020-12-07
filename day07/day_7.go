@@ -37,8 +37,9 @@ func count(bags Bag, b string) int {
 		// 		if num = 2 and has a single child that can hold 2 children we have
 		//		2 * 2 + 2
 		// 		If the final children also hold 2 children:
-		//		2 * (2 * 2 + 2) + 2
+		//		2 * (2 * 2 + 2) + 2 = 14
 		//		etc....
+		//		(see tests)
 		c += num * (count(bags, name) + 1)
 	}
 	return c
