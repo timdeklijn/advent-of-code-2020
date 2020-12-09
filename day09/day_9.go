@@ -12,6 +12,7 @@ import (
 func readlines(s *bufio.Scanner) []int {
 	var lines []int
 
+	// Read lines and convert to int, then append to slice
 	for s.Scan() {
 		row := strings.Trim(s.Text(), "\n")
 		n, _ := strconv.Atoi(row)
@@ -106,7 +107,7 @@ func findWeakness(s *bufio.Scanner, preamble int) (int, error) {
 			}
 		}
 
-		// If we did not find a sum for lines[i], this is the weekness
+		// If we did not find a sum for lines[i], this is the weakness
 		if !ok {
 			return lines[i], nil
 		}
