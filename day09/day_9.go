@@ -11,11 +11,11 @@ import (
 // readlines parses all lines in a scanner to ints and returns them as a slice.
 func readlines(s *bufio.Scanner) []int {
 	var lines []int
+
 	for s.Scan() {
 		row := strings.Trim(s.Text(), "\n")
 		n, _ := strconv.Atoi(row)
 		lines = append(lines, n)
-
 	}
 
 	if err := s.Err(); err != nil {
