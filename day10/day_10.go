@@ -9,6 +9,7 @@ import (
 	"strings"
 )
 
+// keep track of recursion results we have already seen
 var branchesDone map[int]int
 
 // readlines parses all lines in a scanner to ints and returns them as a slice.
@@ -30,7 +31,7 @@ func readlines(s *bufio.Scanner) []int {
 
 func counter(start int, branches map[int]bool) int {
 
-	// If we already did the, return what we found then
+	// If we already did this one, return what we found then
 	cnt, found := branchesDone[start]
 	if found {
 		return cnt
