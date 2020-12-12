@@ -8,6 +8,7 @@ import (
 	"strings"
 )
 
+// Keep track of heading using an index and this list
 var heading = [4]string{"N", "E", "S", "W"}
 
 // abs returns the absolute value of an integer
@@ -35,16 +36,19 @@ func calculatePosition(s *bufio.Scanner) int {
 
 		// Handle inputs
 		if com == "L" {
-
 			// New heading 'left', handle negative index
 			headingIndex = headingIndex - (n / 90)
+
 			if headingIndex < 0 {
 				headingIndex += len(heading)
 			}
+
 			headingIndex = headingIndex % len(heading)
 		}
 
 		if com == "R" {
+			// handle heading right, handle headingIndex being larger then the length
+			// of heading
 			headingIndex = (headingIndex + (n / 90)) % len(heading)
 		}
 
