@@ -1,2 +1,5 @@
 *.txt
 .vscode
+scripts/data.json
+.gitignore
+scripts/table
