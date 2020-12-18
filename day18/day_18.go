@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -69,8 +70,6 @@ func calc(s string, tot int) int {
 
 		// handle parentheses
 		if ss == "(" {
-			// spl := strings.Split(s[i+1:], ")")
-			// fmt.Println(spl[0])
 			ns := parSplit(s[i+1:])
 			// Handle stuff inside parentheses
 			tmp := calc(ns, 0)
@@ -85,6 +84,45 @@ func calc(s string, tot int) int {
 
 	}
 	return tot
+}
+
+func advancedCalc(s string) string {
+
+	fields := strings.Fields(strings.Trim(s, "()"))
+	tot, _ := strconv.Atoi(fields[0])
+
+	for i := 1; i < len(fields); i += 2 {
+		switch n, _ := strconv.Atoi(fields[i+1]); fields[i] {
+		case "+":
+			tot += n
+		case "*":
+			tot *= n
+		}
+	}
+
+	return strconv.Itoa(tot)
+}
+
+func noParam(s string) string {
+	rr := regexp.MustCompile(`\d+ \+ \d+`)
+	for rr.MatchString(s) {
+		s = rr.ReplaceAllStringFunc(s, advancedCalc)
+	}
+	s = advancedCalc(s)
+	return s
+}
+
+func calcAdvanced(s string) int {
+
+	re := regexp.MustCompile(`\([^\(\)]+\)`)
+
+	for re.MatchString(s) {
+		s = re.ReplaceAllStringFunc(s, noParam)
+	}
+
+	ret, _ := strconv.Atoi(noParam(s))
+
+	return ret
 }
 
 func homeworkPart1(s *bufio.Scanner) int {
@@ -102,8 +140,23 @@ func homeworkPart1(s *bufio.Scanner) int {
 	return tot
 }
 
+func homeworkPart2(s *bufio.Scanner) int {
+	tot := 0
+	for s.Scan() {
+		// Prep strings
+		r := strings.Trim(s.Text(), "\n")
+		r = strings.TrimSpace(r)
+		// Do calculation
+		tot += calcAdvanced(r)
+	}
+	if err := s.Err(); err != nil {
+		panic(err)
+	}
+	return tot
+}
+
 func main() {
-	part2 := false
+	part2 := true
 	file, err := os.Open("data_18.txt")
 	if err != nil {
 		panic(err)
@@ -113,9 +166,8 @@ func main() {
 	if !part2 {
 		n := homeworkPart1(scanner)
 		fmt.Println("Day 18-1:", n)
+	} else {
+		n := homeworkPart2(scanner)
+		fmt.Println("Day 18-2:", n)
 	}
-	// else {
-	// 	n := simulateGrid4(scanner)
-	// 	fmt.Println("Day 18-2:", n)
-	// }
 }

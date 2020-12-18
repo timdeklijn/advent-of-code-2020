@@ -54,3 +54,47 @@ func Test_homeworkPart1(t *testing.T) {
 		})
 	}
 }
+
+func Test_homeworkPart2(t *testing.T) {
+	type args struct {
+		s *bufio.Scanner
+	}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{
+			name: "Example 1-1",
+			args: args{createScanner("1 + 2 * 3 + 4 * 5 + 6")},
+			want: 231,
+		},
+		{
+			name: "Example 1-2",
+			args: args{createScanner("2 * 3 + (4 * 5)")},
+			want: 46,
+		},
+		{
+			name: "Example 1-3",
+			args: args{createScanner("5 + (8 * 3 + 9 + 3 * 4 * 3)")},
+			want: 1445,
+		},
+		{
+			name: "Example 1-4",
+			args: args{createScanner("5 * 9 * (7 * 3 * 3 + 9 * 3 + (8 + 6 * 4))")},
+			want: 669060,
+		},
+		{
+			name: "Example 1-4",
+			args: args{createScanner("((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2")},
+			want: 23340,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := homeworkPart2(tt.args.s); got != tt.want {
+				t.Errorf("homeworkPart2() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
