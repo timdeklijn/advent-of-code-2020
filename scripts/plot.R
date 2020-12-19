@@ -3,6 +3,8 @@ library("ggplot2")
 # Load data
 table <- read.table("table", header=TRUE)
 
+table$dt2 <- table$dt2 - table$dt1
+
 # Split data, add puzzle_number, and merge back
 tmp1 <- table[, c("day", "dt1")]
 names(tmp1)[names(tmp1) == "dt1"] <- "dt"
