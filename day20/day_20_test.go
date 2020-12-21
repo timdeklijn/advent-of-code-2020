@@ -144,3 +144,27 @@ func Test_arrangeTiles(t *testing.T) {
 		})
 	}
 }
+
+func Test_findSeaMonsters(t *testing.T) {
+	type args struct {
+		s *bufio.Scanner
+	}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{
+			name: "Example 2",
+			args: args{createScanner(example1)},
+			want: 273,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := findSeaMonsters(tt.args.s); got != tt.want {
+				t.Errorf("findSeaMonsters() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
