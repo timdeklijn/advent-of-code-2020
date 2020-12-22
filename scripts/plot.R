@@ -29,15 +29,18 @@ ggplot(table) +
         # position=position_dodge()
         ) +
     # Set Theme, both color theme and add a border around the legend
-    theme_bw() +
-    theme(legend.background = element_rect(colour = 'black', fill = 'white', linetype='solid')) +
+    theme_classic(base_size=20) + 
+    theme(
+        legend.background=element_rect(colour='black'),
+        plot.background=element_rect(colour="black", size=3),
+    ) +
     # Set Labels
     labs(
         title="Advent of Code 2020",
         subtitle="Compare solution time puzzle 1 and puzzle 2",
         x="day",
         y="Solve Time (Hours)"
-        ) +
+    ) +
     # Move axis origins
     expand_limits(x = 0.5, y = 0) +
     # Reset X-ticks
