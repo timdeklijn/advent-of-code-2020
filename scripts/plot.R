@@ -27,6 +27,7 @@ ggplot(table) +
         colour="black",
         size=0.9,
         stat="identity",
+        position=position_stack(reverse=TRUE)
         ) +
     # Set Theme, both color theme and add a border around the legend
     theme_classic(base_size=20) + 
