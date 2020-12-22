@@ -81,7 +81,7 @@ func parseData(data Data) []Output {
 		diff2 := tm2.Sub(start)
 
 		// Create Output
-		output = append(output, Output{dn, diff1.Minutes(), diff2.Minutes()})
+		output = append(output, Output{dn, diff1.Hours(), diff2.Hours()})
 	}
 
 	// Sort output on day number

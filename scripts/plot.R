@@ -4,6 +4,9 @@ library("ggplot2")
 table <- read.table("table", header=TRUE)
 
 table$dt2 <- table$dt2 - table$dt1
+sum <- table$dt2 + table$dt1
+max_y <- max(sum)
+max_y <- max_y + (0.05*max_y)
 
 # Split data, add puzzle_number, and merge back
 tmp1 <- table[, c("day", "dt1")]
@@ -23,7 +26,7 @@ ggplot(table) +
         aes(x=day, y=dt, fill=puzzle_number),
         colour="black",
         stat="identity",
-        position=position_dodge()
+        # position=position_dodge()
         ) +
     # Set Theme, both color theme and add a border around the legend
     theme_bw() +
@@ -33,12 +36,13 @@ ggplot(table) +
         title="Advent of Code 2020",
         subtitle="Compare solution time puzzle 1 and puzzle 2",
         x="day",
-        y="Solve Time (minutes)"
+        y="Solve Time (Hours)"
         ) +
     # Move axis origins
     expand_limits(x = 0.5, y = 0) +
     # Reset X-ticks
     scale_x_continuous(breaks=seq(1, max(table$day), 1), labels=sprintf("%d", seq(1, max(table$day), 1))) +
     # Move x to y=0
-    scale_y_continuous(expand = c(0, 0)) +
-    png("tst.png")
+    scale_y_continuous(expand = c(0, 0), limits=c(0, max_y)) +
+    png("tst.png", width=1025, height=512)
+
