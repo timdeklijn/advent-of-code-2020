@@ -6,187 +6,201 @@ import (
 	"strings"
 )
 
-// maxVal returns the largest value from a list of ints
-func maxVal(l []int) int {
-	m := 0
-	for _, n := range l {
-		if n > m {
-			m = n
-		}
-	}
-	return m
+// length is used when looping over number
+var length int
+
+// Cup is a container for a linked list
+type Cup struct {
+	num  int
+	next *Cup
 }
 
-// CupGame keeps track of the turn we are in, which is related to the target cup as
-// well as the list of cups.
-type CupGame struct {
-	turn int
-	cups []int
+// LinkedPickUp removes three cups from the linked list and returns them in a slice
+func LinkedPickUp(c *Cup) []*Cup {
+
+	// this will contain the taken out Cups
+	var tmpList []*Cup
+
+	// find the 4th cup after c. Append all cups to tmpList.
+	next := c.next
+	tmpList = append(tmpList, next)
+	next = next.next
+	tmpList = append(tmpList, next)
+	next = next.next
+	tmpList = append(tmpList, next)
+
+	// link c to cup after final cup in tmplist
+	c.next = next.next
+
+	// unlink final cup in templist
+	next.next = nil
+	return tmpList
 }
 
-// slice splits the cup list into a pickup list and a tmp cup list
-func (c *CupGame) slice(s int) ([]int, []int) {
-	var pickUp []int
-	var tmpCups []int
+// printAll walks through the linked list and prints all nums in a string
+func printAll(l map[int]*Cup) {
+	s := ""
+	currentCup := l[1]
+	s += strconv.Itoa(currentCup.num)
+	currentCup = currentCup.next
 
-	// Keep track of indices picked up
-	selector := make(map[int]bool)
-
-	// generate pickup indixes
-	for i := s + 1; i < s+4; i++ {
-		pickUp = append(pickUp, c.cups[i%len(c.cups)])
-		selector[i%len(c.cups)] = true
-	}
-
-	// Create a list ignoring picked up indices
-	for i := range c.cups {
-		if _, ok := selector[i]; !ok {
-			tmpCups = append(tmpCups, c.cups[i])
-		}
-	}
-
-	return pickUp, tmpCups
-}
-
-// rotate puts the target cup back to its original position
-func (c *CupGame) rotate(n int, newCups []int) {
-	newIndex := 0
-	for i, nn := range newCups {
-		if nn == c.cups[n] {
-			newIndex = i
-		}
-	}
-
-	// We will shift by this much
-	shift := newIndex - n
-
-	var rotatedCups []int
-	for i := range newCups {
-		rotatedCups = append(rotatedCups, newCups[(i+shift)%len(newCups)])
-	}
-
-	c.cups = rotatedCups
-}
-
-// move does a single move to the cup list
-func (c *CupGame) move() {
-	n := c.turn % len(c.cups)
-
-	pickUp, tmpCups := c.slice(n)                                   // take out three cups
-	destinationCupIndex := selectDestinationCup(tmpCups, c.cups[n]) // find destination cup
-	end := append(pickUp, tmpCups[destinationCupIndex+1:]...)       // construct end of new cup list
-	newCups := append(tmpCups[:destinationCupIndex+1], end...)      // add end to beginning of new cup list
-
-	c.rotate(n, newCups) // rotate the cup list to have the target at its original position
-	c.turn++
-}
-
-// selectDestinationCup finds the cup to place the pickup cups behind
-func selectDestinationCup(l []int, target int) int {
-	nt := target
 	for {
-		nt--
-
-		// we should not choose the target
-		if nt == target {
-			nt--
-		}
-		// we wrap around
-		if nt == -1 {
-			nt = maxVal(l)
-		}
-
-		// we find the cup we are looking for
-		for i, n := range l {
-			if n == nt {
-				return i
-			}
-		}
-	}
-}
-
-// newCupGame creates a new CupGame struct at turn 0
-func newCupGame(s string) CupGame {
-	var cups []int
-	for _, s := range strings.Split(s, "") {
-		n, _ := strconv.Atoi(s)
-		cups = append(cups, n)
-	}
-	return CupGame{0, cups}
-}
-
-// createAnswer converts a list of ints to a single big number with all numbers after
-// "1" in the list (wrap around)
-func createAnswer(l []int) int {
-	// find at which index 1 is
-	oneIndex := 0
-	for i := range l {
-		if l[i] == 1 {
-			oneIndex = i
+		if currentCup.num == 1 {
 			break
 		}
+		s += strconv.Itoa(currentCup.num)
+		currentCup = currentCup.next
 	}
-	// collect all numbers after one into a single string
+	fmt.Println(s)
+}
+
+// NewCupLinkedList creates a linked list of cups with nums taken from the input
+// string
+func NewBigCupLinkedList(s string) map[int]*Cup {
+	// split string into numbers
+	nums := strings.Split(s, "")
+
+	// create first cup
+	n1, _ := strconv.Atoi(nums[0])
+	currentCup := &Cup{n1, nil}
+
+	// loop over numbers and add cups
+	l := make(map[int]*Cup)
+	for _, s := range nums[1:] {
+		n, _ := strconv.Atoi(s)   // convert input string to a number
+		nextCup := &Cup{n, nil}   // create next cup
+		currentCup.next = nextCup // link next cup from current cup
+		l[currentCup.num] = currentCup
+		currentCup = nextCup // repeat
+	}
+
+	// add cups with the number 10 - 1000000 to the linked list
+	for i := 10; i <= 1000000; i++ {
+		nextCup := &Cup{i, nil}
+		currentCup.next = nextCup
+		l[currentCup.num] = currentCup
+		currentCup = nextCup
+	}
+
+	// add first cup as next to last cup (make a circle)
+	currentCup.next = l[n1]
+	l[currentCup.num] = currentCup
+
+	// return list of cups
+	return l
+}
+
+// NewCupLinkedList creates a linked list of cups with nums taken from the input
+// string. The linked list is saved in a map.
+func NewCupLinkedList(s string) map[int]*Cup {
+	// split string into numbers
+	nums := strings.Split(s, "")
+
+	// create first cup
+	n1, _ := strconv.Atoi(nums[0])
+	currentCup := &Cup{n1, nil}
+
+	// loop over numbers and link cups
+	l := make(map[int]*Cup)
+	for _, s := range nums[1:] {
+		n, _ := strconv.Atoi(s)
+		nextCup := &Cup{n, nil}
+		// link the next cup to the current cup
+		currentCup.next = nextCup
+		l[currentCup.num] = currentCup
+		currentCup = nextCup
+	}
+	// add first cup as next to last cup
+	currentCup.next = l[n1]
+	l[currentCup.num] = currentCup
+
+	// return list of cups
+	return l
+}
+
+// findLinkedDestinationCup finds the cup after which the taken out cups should be
+// placed
+func findLinkedDestinationCup(l map[int]*Cup, c *Cup, tmpList []*Cup) *Cup {
+	target := c.num - 1
+	for {
+		if target == 0 {
+			target = length
+		}
+		if target != tmpList[0].num && target != tmpList[1].num && target != tmpList[2].num && target != 0 {
+			return l[target]
+		}
+		target--
+	}
+}
+
+// linkedMove does one step in the game of cups using a linnked list
+func linkedMove(l map[int]*Cup, c *Cup) *Cup {
+	tmpList := LinkedPickUp(c)                             // take out list of three
+	destination := findLinkedDestinationCup(l, c, tmpList) // find destination cup
+	destinationNeighbour := destination.next               // save neighbour of destination cup
+	destination.next = tmpList[0]                          // link destination cup to take out list
+	tmpList[len(tmpList)-1].next = destinationNeighbour    // link take out list to desination neighbour
+	return c.next                                          // return the next starting cup
+}
+
+// findLinkedAnswer ceates a string with all numbers from 1 until it sees 1 again.
+func findLinkedAnswer(l map[int]*Cup) int {
+	c := l[1]
+	c = c.next
 	s := ""
-	for i := oneIndex + 1; i < len(l)+oneIndex; i++ {
-		s += strconv.Itoa(l[i%len(l)])
+
+	for {
+		if c.num == 1 {
+			break
+		}
+		s += strconv.Itoa(c.num)
+		c = c.next
 	}
-	// convert back to a number and retunr
 	n, _ := strconv.Atoi(s)
 	return n
 }
 
-// crabCupspt1 calculates the answer to part 1
+//findProduct takes the product of the two cup numbers after the cup with number 1
+func findProduct(l map[int]*Cup) int {
+	return l[1].next.num * l[1].next.next.num
+}
+
+// crabCupspt1 calculates the answer for part 1
 func crabCupspt1(input string, turns int) int {
-	cups := newCupGame(input)
+	cups := NewCupLinkedList(input)
+	length = len(cups)
+	startNum, _ := strconv.Atoi(string(input[0]))
+	c := cups[startNum]
 	for i := 0; i < turns; i++ {
-		cups.move()
+		c = linkedMove(cups, c)
 	}
-	return createAnswer(cups.cups)
+	return findLinkedAnswer(cups)
 }
 
-// newCupGame creates a new CupGame struct at turn 0
-func newBigCupGame(s string) CupGame {
-	var cups []int
-	for _, s := range strings.Split(s, "") {
-		n, _ := strconv.Atoi(s)
-		cups = append(cups, n)
-	}
-	mv := maxVal(cups)
-	for i := mv + 1; i < 1000001; i++ {
-		cups = append(cups, i)
-	}
-	return CupGame{0, cups}
-}
-
-func createBigAnswer(l []int) int {
-	oneIndex := 0
-	for i := range l {
-		if l[i] == 1 {
-			oneIndex = i
-		}
-	}
-	return l[oneIndex+1] * l[oneIndex+2]
-}
-
+// crabCupspt2 calculates the answer for part 2
 func crabCupspt2(input string, turns int) int {
-	cups := newBigCupGame(input)
+	// create cups
+	cups := NewBigCupLinkedList(input)
+	length = len(cups)
+	startNum, _ := strconv.Atoi(string(input[0]))
+	// first target cup
+	c := cups[startNum]
+	// simulate the turns
 	for i := 0; i < turns; i++ {
-		if i%1000 == 0 {
-			fmt.Println("Turn", i)
-		}
-		cups.move()
+		// do a single turn in the game
+		c = linkedMove(cups, c)
 	}
-	return createBigAnswer(cups.cups)
+	// return the product of the two cups after cup with num 1
+	return findProduct(cups)
 }
 
 func main() {
-	part2 := false
+	part2 := true
 	if !part2 {
 		n := crabCupspt1("792845136", 100)
 		fmt.Println("Day 22-1:", n)
 	} else {
-		n := crabCupspt1("792845136", 10000000)
+		n := crabCupspt2("792845136", 10000000)
 		fmt.Println("Day 22-2:", n)
 	}
 }
