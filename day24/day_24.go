@@ -111,7 +111,6 @@ func getMinMax(m map[Coord]bool) (int, int, int, int) {
 		}
 	}
 	return minX - 1, maxX + 1, minY - 1, maxY + 1
-	//return minX, maxX, minY, maxY
 }
 
 // createPossibleCoordinates creates a list of coordinates to check for neighbours in
@@ -190,7 +189,6 @@ func simulateTiles(s *bufio.Scanner) int {
 			} else {
 				newTiles[c] = m[c]
 			}
-
 		}
 
 		// overwrite m with result of timestep
