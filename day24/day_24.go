@@ -119,6 +119,7 @@ func getMinMax(m map[Coord]bool) (int, int, int, int) {
 func createPossibleCoordinates(m map[Coord]bool) []Coord {
 	minX, maxX, minY, maxY := getMinMax(m) // get mins and maxes
 	var l []Coord
+
 	// create all possible coordinates
 	for x := minX; x < maxX+1; x++ {
 		for y := minY; y < maxY+1; y++ {
@@ -162,19 +163,16 @@ func countNeighbours(c Coord, m map[Coord]bool) int {
 func simulateTiles(s *bufio.Scanner) int {
 	m := readTiles(s) // read day0 tiles
 
-	// 2. Per possible coordinate:
-	// 			- count white neighbours, black neighhbours = 6 - white
-	// 			- flip tile accordingly and write into new board
-	// 3. overwrite current board with new board
-
+	// do 100 steps in the simulation
 	i := 0
 	for i < 100 {
+		// new map to write chages in
 		newTiles := make(map[Coord]bool)
+		// possible coordinates
 		coordList := createPossibleCoordinates(m)
 		for _, c := range coordList {
 
-			// - if c is not in m it is white
-			// - if m[c] = false it is white
+			// what is our current colour?
 			black := false
 			if v, ok := m[c]; ok {
 				black = v
@@ -184,6 +182,7 @@ func simulateTiles(s *bufio.Scanner) int {
 			// neightbours.
 			n := 6 - countNeighbours(c, m)
 
+			// do logic based on color and number of black neighbours
 			if black && (n == 0 || n > 2) {
 				newTiles[c] = false
 			} else if !black && n == 2 {
@@ -194,10 +193,12 @@ func simulateTiles(s *bufio.Scanner) int {
 
 		}
 
+		// overwrite m with result of timestep
 		m = newTiles
 		i++
 	}
 
+	// count number of black tiles
 	sum := 0
 	for _, t := range m {
 		if t {
