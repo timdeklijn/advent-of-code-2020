@@ -25,7 +25,7 @@ ggplot(table) +
     geom_bar(
         aes(x=day, y=dt, fill=puzzle_number),
         colour="black",
-        size=0.9,
+        size=0.3,
         stat="identity",
         position=position_stack(reverse=TRUE)
         ) +
