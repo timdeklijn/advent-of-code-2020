@@ -51,7 +51,7 @@ ggplot(table) +
     # Set Labels
     labs(
         title="Advent of Code 2020",
-        subtitle="Compare solution time puzzle 1 and puzzle 2",
+        subtitle="Solution time puzzle 1 and puzzle 2",
         x="day",
         y="Solve Time (Hours)"
     ) +
