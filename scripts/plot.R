@@ -41,9 +41,9 @@ ggplot(table) +
         panel.background=element_rect(fill="#0f0f23"),
         # Axis colors
         axis.text=element_text(color="#009900"),
-        axis.line=element_line(color="white"),
+        axis.line=element_line(color="#cccccc"),
         axis.title=element_text(color="#00cc00"),
-        axis.ticks=element_line(color="white"),
+        axis.ticks=element_line(color="#cccccc"),
         # Plot title
         plot.title=element_text(color="#00cc00"),
         plot.subtitle=element_text(color="#009900"),
