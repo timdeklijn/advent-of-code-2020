@@ -32,8 +32,21 @@ ggplot(table) +
     # Set Theme, both color theme and add a border around the legend
     theme_classic(base_size=20) + 
     theme(
-        legend.background=element_rect(colour='black'),
-        plot.background=element_rect(colour="black", size=3),
+        # Legend colors
+        legend.background=element_rect(fill="#0f0f23"),
+        legend.text=element_text(color="#009900"),
+        legend.title=element_text(color="#00cc00"),
+        # Set backgrounds
+        plot.background=element_rect(fill="#0f0f23"),
+        panel.background=element_rect(fill="#0f0f23"),
+        # Axis colors
+        axis.text=element_text(color="#009900"),
+        axis.line=element_line(color="white"),
+        axis.title=element_text(color="#00cc00"),
+        axis.ticks=element_line(color="white"),
+        # Plot title
+        plot.title=element_text(color="#00cc00"),
+        plot.subtitle=element_text(color="#009900"),
     ) +
     # Set Labels
     labs(
@@ -48,5 +61,6 @@ ggplot(table) +
     scale_x_continuous(breaks=seq(1, max(table$day), 1), labels=sprintf("%d", seq(1, max(table$day), 1))) +
     # Move x to y=0
     scale_y_continuous(expand = c(0, 0), limits=c(0, max_y)) +
+    scale_fill_manual(values=c("#009900", "#ffff66")) + 
     png("tst.png", width=1025, height=512)
 
